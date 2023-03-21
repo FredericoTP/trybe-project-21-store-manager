@@ -2,7 +2,14 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const { productService } = require('../../../src/services');
 const { productModel } = require('../../../src/models');
-const { allProducts } = require('./mocks/product.service.mock');
+const {
+  allProducts,
+  newProduct,
+  validProduct,
+  invalidProduct
+} = require('./mocks/product.service.mock');
+
+const INVALID_VALUE = 'INVALID_VALUE';
 
 describe('Testes de unidade do service product', function () {
   describe('Listagem de todos os produtos', function () {
@@ -29,7 +36,7 @@ describe('Testes de unidade do service product', function () {
     it('Retorna um erro caso o ID seja inválido', async function () {
       const result = await productService.findById('a');
 
-      expect(result.type).to.be.equal('INVALID_VALUE');
+      expect(result.type).to.be.equal(INVALID_VALUE);
       expect(result.message).to.deep.equal('"id" must be a number');
     });
 
@@ -39,6 +46,25 @@ describe('Testes de unidade do service product', function () {
       const result = await productService.findById(999);
       expect(result.type).to.be.equal('PRODUCT_NOT_FOUND');
       expect(result.message).to.deep.equal('Product not found');
+    });
+  });
+
+  describe('cadastro de um produto', function () {
+    it('Retorna o ID da pessoa cadastrada', async function () {
+      sinon.stub(productModel, 'insertProduct').resolves(4);
+      sinon.stub(productModel, 'findById').resolves(newProduct);
+
+      const result = await productService.insertProduct(validProduct);
+
+      expect(result.type).to.be.equal(null);
+      expect(result.message).to.deep.equal(newProduct);
+    });
+
+    it('Retorna um erro ao passar um produto inválido', async function () {
+      const result = await productService.insertProduct(invalidProduct);
+
+      expect(result.type).to.be.equal(INVALID_VALUE);
+      expect(result.message).to.deep.equal('"name" length must be at least 5 characters long');
     });
   });
 

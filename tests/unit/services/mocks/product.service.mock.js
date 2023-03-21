@@ -1,3 +1,6 @@
+const validProduct = "ProductX";
+const invalidProduct = "abcd";
+
 const allProducts = [
   {
     id: 1,
@@ -13,6 +16,14 @@ const allProducts = [
   }
 ];
 
+const newProduct = {
+  id: 4,
+  name: validProduct
+}
+
 module.exports = {
   allProducts,
+  newProduct,
+  validProduct,
+  invalidProduct,
 }
