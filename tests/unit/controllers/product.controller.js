@@ -3,7 +3,8 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const { productController } = require('../../../src/controllers');
 const { productService } = require('../../../src/services');
-const { allProducts } = require('./mocks/product.controller.mock');
+const { allProducts, newProduct } = require('./mocks/product.controller.mock');
+const { validateNewProductField } = require('../../../src/middlewares');
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -96,6 +97,60 @@ describe('Testes de unidade do controller product', function () {
 
       expect(res.status).to.have.been.calledWith(404);
       expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+    });
+  });
+
+  describe('Cadastrando um produto', function () {
+    it('Deve retornar o status 201 e o produto criado ao enviar dados válidos', async function () {
+      const req = {
+        body: {
+          name: 'ProductX',
+        },
+      };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productService, 'insertProduct').resolves({ type: null, message: newProduct });
+
+      await productController.insertProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(201);
+      expect(res.json).to.have.been.calledWith(newProduct);
+    });
+
+    it('Deve retornar um erro ao enviar um nome com menos de 5 caracteres', async function () {
+      const req = {
+        body: {
+          name: 'abcd',
+        },
+      };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productService, 'insertProduct').resolves({ type: INVALID_VALUE, message: '"name" length must be at least 5 characters long' });
+
+      await productController.insertProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(422);
+      expect(res.json).to.have.been.calledWith({ message: '"name" length must be at least 5 characters long' });
+    });
+
+    it('Deve retornar um erro caso não passe um item necessário do body', async function () {
+      const res = {};
+      const req = {
+        body: {},
+      };
+      const next = sinon.stub().returns();
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await validateNewProductField(req, res, next);
+
+      expect(res.status).to.have.been.calledOnceWith(400);
+      expect(res.json).to.have.been.calledWith({ message: '"name" is required' });
+      expect(next).to.have.not.been.called;
     });
   });
 
