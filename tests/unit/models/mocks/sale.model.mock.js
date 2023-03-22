@@ -51,7 +51,7 @@ const newSaleProducts = [
     info: 'Rows matched: 1  Changed: 1  Warnings: 0',
     serverStatus: 2,
     warningStatus: 0,
-    changedRows: 1,
+    changedRows: 2,
   },
   undefined,
 ]
