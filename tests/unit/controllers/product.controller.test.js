@@ -3,7 +3,12 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const { productController } = require('../../../src/controllers');
 const { productService } = require('../../../src/services');
-const { allProducts, newProduct, updatedProduct } = require('./mocks/product.controller.mock');
+const {
+  allProducts,
+  newProduct,
+  updatedProduct,
+  filteredProducts,
+} = require('./mocks/product.controller.mock');
 const { validateNewProductField } = require('../../../src/middlewares');
 
 const { expect } = chai;
@@ -251,6 +256,62 @@ describe('Testes de unidade do controller product', function () {
 
       expect(res.status).to.have.been.calledWith(404);
       expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+    });
+  });
+
+  describe('Listando produtos filtrados por query', function () {
+    it('Retorna status 200 e a lista completa de produtos caso não seja passada a query', async function () {
+      const res = {};
+      const req = {
+        query: {
+          q: ''
+        }
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productService, 'findByQuery').resolves({ type: null, message: allProducts });
+
+      await productController.findByQuery(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(allProducts);
+    });
+
+    it('Retorna status 200 e a lista filtrado de produtos', async function () {
+      const res = {};
+      const req = {
+        query: {
+          q: 'de'
+        }
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productService, 'findByQuery').resolves({ type: null, message: filteredProducts });
+
+      await productController.findByQuery(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(filteredProducts);
+    });
+
+    it('Retorna um erro caso a query seja inválida', async function () {
+      const res = {};
+      const req = {
+        query: {
+          q: 1
+        }
+      };
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productService, 'findByQuery').resolves({ type: INVALID_VALUE, message: '"query" must be a string' });
+
+      await productController.findByQuery(req, res);
+
+      expect(res.status).to.have.been.calledWith(422);
+      expect(res.json).to.have.been.calledWith({ message: '"query" must be a string' });
     });
   });
 
