@@ -1,6 +1,21 @@
 const { saleModel } = require('../models');
 const schema = require('./validations/validationsInputValues');
 
+const findAll = async () => {
+  const sales = await saleModel.findAll();
+  return { type: null, message: sales };
+};
+
+const findById = async (saleId) => {
+  const error = schema.validateId(saleId);
+  if (error.type) return error;
+
+  const sale = await saleModel.findById(saleId);
+  if (!sale[0]) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
+
+  return { type: null, message: sale };
+};
+
 const insertSaleProduct = async (sale) => {
   const error = schema.validateNewSaleProduct(sale);
   if (error.type) return error;
@@ -22,5 +37,7 @@ const insertSaleProduct = async (sale) => {
 };
 
 module.exports = {
+  findAll,
+  findById,
   insertSaleProduct,
 };

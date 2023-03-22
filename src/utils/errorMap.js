@@ -1,6 +1,7 @@
 const errorMap = {
   INVALID_VALUE: 422,
   PRODUCT_NOT_FOUND: 404,
+  SALE_NOT_FOUND: 404,
   BAD_REQUEST: 400,
 };
 
