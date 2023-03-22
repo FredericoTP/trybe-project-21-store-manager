@@ -21,9 +21,39 @@ const newProduct = {
   name: validProduct
 }
 
+const productToUpdate = {
+  name: validProduct
+}
+
+const invalidProductToUpdate = {
+  name: invalidProduct
+}
+
+const updateProduct = [
+  {
+    fieldCount: 0,
+    affectedRows: 1,
+    insertId: 0,
+    info: 'Rows matched: 1  Changed: 1  Warnings: 0',
+    serverStatus: 2,
+    warningStatus: 0,
+    changedRows: 1,
+  },
+  undefined,
+]
+
+const updatedProduct = {
+  id: 1,
+  ...productToUpdate
+}
+
 module.exports = {
   allProducts,
   newProduct,
   validProduct,
   invalidProduct,
+  productToUpdate,
+  updateProduct,
+  updatedProduct,
+  invalidProductToUpdate,
 }

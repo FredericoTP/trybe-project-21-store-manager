@@ -1,3 +1,4 @@
+const snakeize = require('snakeize');
 const connection = require('./connection');
 
 const findAll = async () => {
@@ -31,8 +32,20 @@ const insertProduct = async (product) => {
   return insertId;
 };
 
+const updateProductById = async (productId, product) => {
+  const columns = Object.keys(snakeize(product)).map((key) => `${key} = ?`).join(', ');
+
+  const query = `UPDATE StoreManager.products SET ${columns} WHERE id = ?`;
+  const result = await connection.execute(
+    query, [...Object.values(product), productId],
+  );
+
+  return result;
+};
+
 module.exports = {
   findAll,
   findById,
   insertProduct,
+  updateProductById,
 };

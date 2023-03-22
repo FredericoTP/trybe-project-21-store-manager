@@ -6,7 +6,11 @@ const {
   allProducts,
   newProduct,
   validProduct,
-  invalidProduct
+  invalidProduct,
+  productToUpdate,
+  updateProdutc,
+  updatedProduct,
+  invalidProductToUpdate,
 } = require('./mocks/product.service.mock');
 
 const INVALID_VALUE = 'INVALID_VALUE';
@@ -49,7 +53,7 @@ describe('Testes de unidade do service product', function () {
     });
   });
 
-  describe('cadastro de um produto', function () {
+  describe('Cadastro de um produto', function () {
     it('Retorna o ID da pessoa cadastrada', async function () {
       sinon.stub(productModel, 'insertProduct').resolves(4);
       sinon.stub(productModel, 'findById').resolves(newProduct);
@@ -65,6 +69,34 @@ describe('Testes de unidade do service product', function () {
 
       expect(result.type).to.be.equal(INVALID_VALUE);
       expect(result.message).to.deep.equal('"name" length must be at least 5 characters long');
+    });
+  });
+
+  describe('Atualização de um produto', function () {
+    it('Retorna o produto atualizado como o id exista', async function () {
+      sinon.stub(productModel, 'findById').resolves(allProducts[0]);
+      sinon.stub(productModel, 'updateProductById').resolves(updateProdutc);
+
+      const result = await productService.updateProductById(1, productToUpdate);
+
+      expect(result.type).to.be.equal(null);
+      expect(result.message).to.deep.equal(updatedProduct);
+    });
+
+    it('Retorna um erro ao passar um produto inválido', async function () {
+      const result = await productService.updateProductById(1, invalidProductToUpdate);
+
+      expect(result.type).to.be.equal(INVALID_VALUE);
+      expect(result.message).to.deep.equal('"name" length must be at least 5 characters long');
+    });
+
+    it('Retorna um erro caso o ID não exista', async function () {
+      sinon.stub(productModel, 'findById').resolves(undefined);
+
+      const result = await productService.updateProductById(999, productToUpdate);
+
+      expect(result.type).to.be.equal('PRODUCT_NOT_FOUND');
+      expect(result.message).to.deep.equal('Product not found');
     });
   });
 
