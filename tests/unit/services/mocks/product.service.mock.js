@@ -47,6 +47,17 @@ const updatedProduct = {
   ...productToUpdate
 }
 
+const productsByQuery = [
+  {
+    id: 1,
+    name: "Martelo de Thor"
+  },
+  {
+    id: 2,
+    name: "Traje de encolhimento"
+  }
+]
+
 module.exports = {
   allProducts,
   newProduct,
@@ -56,4 +67,5 @@ module.exports = {
   updateProduct,
   updatedProduct,
   invalidProductToUpdate,
+  productsByQuery,
 }

@@ -8,6 +8,8 @@ router.get('/', productController.findAll);
 
 router.post('/', validateNewProductField, productController.insertProduct);
 
+router.get('/search', productController.findByQuery);
+
 router.get('/:id', productController.findById);
 
 router.put('/:id', validateNewProductField, productController.updateProductById);

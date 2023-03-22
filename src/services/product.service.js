@@ -50,10 +50,21 @@ const removeProductById = async (productId) => {
   return { type: null, message: '' };
 };
 
+const findByQuery = async (query) => {
+  const error = schema.validateQuery(query);
+  console.log(error);
+  if (error.type) return error;
+
+  const products = await productModel.findByQuery(query);
+
+  return { type: null, message: products };
+};
+
 module.exports = {
   findAll,
   findById,
   insertProduct,
   updateProductById,
   removeProductById,
+  findByQuery,
 };

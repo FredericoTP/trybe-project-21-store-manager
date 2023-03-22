@@ -46,10 +46,20 @@ const removeProductById = async (req, res) => {
   return res.status(204).json('');
 };
 
+const findByQuery = async (req, res) => {
+  const { q } = req.query;
+  const { type, message } = await productService.findByQuery(q);
+
+  if (type) return res.status(errorMap.mapError(type)).json({ message });
+
+  return res.status(200).json(message);
+};
+
 module.exports = {
   findAll,
   findById,
   insertProduct,
   updateProductById,
   removeProductById,
+  findByQuery,
 };

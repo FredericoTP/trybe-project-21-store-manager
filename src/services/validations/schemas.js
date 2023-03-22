@@ -2,6 +2,8 @@ const Joi = require('joi');
 
 const idSchema = Joi.number().integer().min(1).required();
 
+const querySchema = Joi.string().allow('').required();
+
 const newProductSchema = Joi.object({
   name: Joi.string().min(5).required(),
 });
@@ -18,6 +20,7 @@ const newSaleProductSchema = Joi.array().items(sale).required().messages({
 
 module.exports = {
   idSchema,
+  querySchema,
   newProductSchema,
   newSaleProductSchema,
 };

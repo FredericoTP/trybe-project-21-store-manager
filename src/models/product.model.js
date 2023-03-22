@@ -52,10 +52,18 @@ const removeProductById = async (productId) => {
   return result;
 };
 
+const findByQuery = async (query) => {
+  const products = await findAll();
+  const productsFiltered = products.filter((item) => item.name.includes(query));
+
+  return productsFiltered;
+};
+
 module.exports = {
   findAll,
   findById,
   insertProduct,
   updateProductById,
   removeProductById,
+  findByQuery,
 };

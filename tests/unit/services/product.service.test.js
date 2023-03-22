@@ -11,6 +11,7 @@ const {
   updateProdutc,
   updatedProduct,
   invalidProductToUpdate,
+  productsByQuery,
 } = require('./mocks/product.service.mock');
 
 const INVALID_VALUE = 'INVALID_VALUE';
@@ -125,6 +126,33 @@ describe('Testes de unidade do service product', function () {
 
       expect(result.type).to.be.equal('PRODUCT_NOT_FOUND');
       expect(result.message).to.deep.equal('Product not found');
+    });
+  });
+
+  describe('Listagem de produtos buscando por um query', function () {
+    it('Retorna a lista de produtos filtrada pela query', async function () {
+      sinon.stub(productModel, 'findByQuery').resolves(productsByQuery);
+
+      const result = await productService.findByQuery('de');
+
+      expect(result.type).to.be.equal(null);
+      expect(result.message).to.deep.equal(productsByQuery);
+    });
+
+    it('Retornaum array vazio caso não ache produto compatível', async function () {
+      sinon.stub(productModel, 'findByQuery').resolves([]);
+
+      const result = await productService.findByQuery('de');
+
+      expect(result.type).to.be.equal(null);
+      expect(result.message).to.deep.equal([]);
+    });
+
+    it('Retorna um erro caso a query seja inválida', async function () {
+      const result = await productService.findByQuery(1);
+
+      expect(result.type).to.be.equal(INVALID_VALUE);
+      expect(result.message).to.deep.equal('"query" must be a string');
     });
   });
 
