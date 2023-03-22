@@ -38,9 +38,22 @@ const updateProductById = async (productId, product) => {
   return { type: null, message: { id: checkProductExists.id, ...product } };
 };
 
+const removeProductById = async (productId) => {
+  const error = schema.validateId(productId);
+  if (error.type) return error;
+
+  const checkProductExists = await productModel.findById(productId);
+  if (!checkProductExists) return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
+
+  await productModel.removeProductById(productId);
+
+  return { type: null, message: '' };
+};
+
 module.exports = {
   findAll,
   findById,
   insertProduct,
   updateProductById,
+  removeProductById,
 };

@@ -100,6 +100,34 @@ describe('Testes de unidade do service product', function () {
     });
   });
 
+  describe('Remoção de um produto', function () {
+    it('Retorna sucesso quando deleta um produto', async function () {
+      sinon.stub(productModel, 'findById').resolves(allProducts[0]);
+      sinon.stub(productModel, 'removeProductById').resolves();
+
+      const result = await productService.removeProductById(1);
+
+      expect(result.type).to.be.equal(null);
+      expect(result.message).to.deep.equal('');
+    });
+
+    it('Retorna um erro caso o ID seja inválido', async function () {
+      const result = await productService.removeProductById('a');
+
+      expect(result.type).to.be.equal(INVALID_VALUE);
+      expect(result.message).to.deep.equal('"id" must be a number');
+    });
+
+    it('Retorna um erro caso o ID não exista', async function () {
+      sinon.stub(productModel, 'findById').resolves(undefined);
+
+      const result = await productService.removeProductById(999);
+
+      expect(result.type).to.be.equal('PRODUCT_NOT_FOUND');
+      expect(result.message).to.deep.equal('Product not found');
+    });
+  });
+
   afterEach(function () {
     sinon.restore();
   });
