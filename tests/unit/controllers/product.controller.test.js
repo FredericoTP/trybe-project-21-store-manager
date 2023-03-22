@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const { productController } = require('../../../src/controllers');
 const { productService } = require('../../../src/services');
-const { allProducts, newProduct } = require('./mocks/product.controller.mock');
+const { allProducts, newProduct, updatedProduct } = require('./mocks/product.controller.mock');
 const { validateNewProductField } = require('../../../src/middlewares');
 
 const { expect } = chai;
@@ -151,6 +151,50 @@ describe('Testes de unidade do controller product', function () {
       expect(res.status).to.have.been.calledOnceWith(400);
       expect(res.json).to.have.been.calledWith({ message: '"name" is required' });
       expect(next).to.have.not.been.called;
+    });
+  });
+
+  describe('Atualizando um produto', function () {
+    it('Deve retornar o status 200 e o produto atualizado ao enviar dados válidos', async function () {
+      const req = {
+        params: {
+          id: 1,
+        },
+        body: {
+          name: 'ProductX',
+        },
+      };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productService, 'updateProductById').resolves({ type: null, message: updatedProduct });
+
+      await productController.updateProductById(req, res);
+
+      expect(res.status).to.have.been.calledWith(200);
+      expect(res.json).to.have.been.calledWith(updatedProduct);
+    });
+
+    it('Deve retornar um erro ao enviar um nome com menos de 5 caracteres', async function () {
+      const req = {
+        params: {
+          id: 1,
+        },
+        body: {
+          name: 'abcd',
+        },
+      };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productService, 'updateProductById').resolves({ type: INVALID_VALUE, message: '"name" length must be at least 5 characters long' });
+
+      await productController.updateProductById(req, res);
+
+      expect(res.status).to.have.been.calledWith(422);
+      expect(res.json).to.have.been.calledWith({ message: '"name" length must be at least 5 characters long' });
     });
   });
 

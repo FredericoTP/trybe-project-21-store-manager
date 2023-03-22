@@ -1,3 +1,5 @@
+const validName = "ProductX";
+
 const allProducts = [
   {
     id: 1,
@@ -15,10 +17,16 @@ const allProducts = [
 
 const newProduct = {
   id: 4,
-  name: "ProductX"
+  name: validName
+}
+
+const updatedProduct = {
+  id: 1,
+  name: validName
 }
 
 module.exports = {
   allProducts,
   newProduct,
+  updatedProduct,
 }
