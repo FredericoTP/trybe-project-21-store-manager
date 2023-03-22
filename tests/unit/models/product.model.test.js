@@ -22,15 +22,15 @@ describe('Testes de unidade do model product', function () {
     expect(result).to.deep.equal(allProducts[0]);
   });
 
-  afterEach(function () {
-    sinon.restore();
-  });
-
   it('Cadastra um item na lista de produto', async function () {
     sinon.stub(connection, 'execute').resolves([{ insertId: 4 }]);
 
     const result = await productModel.insertProduct(newProduct);
 
     expect(result).to.be.equal(4);
+  });
+
+  afterEach(function () {
+    sinon.restore();
   });
 });
