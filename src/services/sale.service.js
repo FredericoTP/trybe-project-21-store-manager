@@ -51,9 +51,36 @@ const removeSaleById = async (saleId) => {
   return { type: null, message: '' };
 };
 
+const updateSaleById = async (saleId, sale) => {
+  const error = schema.validateNewSaleProduct(sale);
+  if (error.type) return error;
+
+  const errorSaleId = await saleModel.findById(saleId);
+  if (!errorSaleId[0]) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
+  
+  const errorId = await schema.validateProductIdExists(sale);
+  if (errorId.type) return errorId;
+
+  const oldSale = await saleModel.findSaleProductById(saleId);
+
+  await Promise.all(sale.map(
+    async (item, index) => saleModel.updateSaleById(saleId, oldSale[index], item),
+  ));
+
+  const saleProducts = await saleModel.findSaleProductById(saleId);
+
+  const object = {
+    saleId,
+    itemsUpdated: saleProducts,
+  };
+
+  return { type: null, message: object };
+};
+
 module.exports = {
   findAll,
   findById,
   insertSaleProduct,
   removeSaleById,
+  updateSaleById,
 };

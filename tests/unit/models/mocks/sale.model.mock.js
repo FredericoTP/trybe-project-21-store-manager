@@ -56,9 +56,15 @@ const newSaleProducts = [
   undefined,
 ]
 
+const oldSale = {
+  productId: 3,
+  quantity: 2
+}
+
 module.exports = {
   newSale,
   newSaleProducts,
   allSales,
   saleById,
+  oldSale,
 }

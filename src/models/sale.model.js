@@ -78,6 +78,19 @@ const removeSaleById = async (saleId) => {
   return result;
 };
 
+const updateSaleById = async (saleId, oldSale, sale) => {
+  const columns = Object.keys(snakeize(sale)).map((key) => `${key} = ?`).join(', ');
+
+  const query = `UPDATE StoreManager.sales_products
+  SET ${columns} WHERE sale_id = ? AND product_id = ? AND quantity = ?`;
+
+  const result = await connection.execute(
+    query, [...Object.values(sale), saleId, oldSale.productId, oldSale.quantity],
+  );
+
+  return result;
+};
+
 module.exports = {
   findAll,
   findById,
@@ -85,4 +98,5 @@ module.exports = {
   insertSaleProduct,
   findSaleProductById,
   removeSaleById,
+  updateSaleById,
 };
