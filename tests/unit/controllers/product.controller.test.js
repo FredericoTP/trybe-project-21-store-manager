@@ -198,6 +198,62 @@ describe('Testes de unidade do controller product', function () {
     });
   });
 
+  describe('Deletando um produto', function () {
+    it('Deve retornar o status 204 ao deletar o produto com sucesso', async function () {
+      const req = {
+        params: {
+          id: 1,
+        },
+      };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productService, 'removeProductById').resolves({ type: null, message: '' });
+
+      await productController.removeProductById(req, res);
+
+      expect(res.status).to.have.been.calledWith(204);
+      expect(res.json).to.have.been.calledWith('');
+    });
+
+    it('Deve retornar um erro caso o ID seja inválido', async function () {
+      const req = {
+        params: {
+          id: 'a',
+        },
+      };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productService, 'removeProductById').resolves({ type: INVALID_VALUE, message: '"id" must be a number' });
+
+      await productController.removeProductById(req, res);
+
+      expect(res.status).to.have.been.calledWith(422);
+      expect(res.json).to.have.been.calledWith({ message: '"id" must be a number' });
+    });
+
+    it('Deve retornar um erro caso o ID não exista', async function () {
+      const req = {
+        params: {
+          id: 999,
+        },
+      };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(productService, 'removeProductById').resolves({ type: PRODUCT_NOT_FOUND, message: 'Product not found' });
+
+      await productController.removeProductById(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
+    });
+  });
+
   afterEach(function () {
     sinon.restore();
   });
