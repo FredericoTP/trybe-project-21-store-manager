@@ -1,7 +1,7 @@
 const { saleService } = require('../services');
 const errorMap = require('../utils/errorMap');
 
-const findAll = async (req, res) => {
+const findAll = async (_req, res) => {
   const { type, message } = await saleService.findAll();
   
   if (type) return res.status(errorMap.mapError(type)).json(message);

@@ -1,3 +1,5 @@
+const { productModel } = require('../../models');
+
 const {
   idSchema,
   querySchema,
@@ -29,8 +31,22 @@ const validateNewProduct = (name) => {
   return { type: null, message: '' };
 };
 
+const validateProductIdExists = async (sale) => {
+  if (sale) {
+    const products = await Promise.all(
+      sale.map(async (item) => productModel.findById(item.productId)),
+    );
+
+    const someIdIsMissing = products.some((item) => item === undefined);
+    if (someIdIsMissing) return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
+  }
+
+  return { type: null, message: '' };
+};
+
 const validateNewSaleProduct = (sale) => {
   const { error } = newSaleProductSchema.validate(sale);
+  
   if (error) {
     if (error.message.includes('required')) return { type: 'BAD_REQUEST', message: error.message };
   
@@ -45,4 +61,5 @@ module.exports = {
   validateQuery,
   validateNewProduct,
   validateNewSaleProduct,
+  validateProductIdExists,
 };

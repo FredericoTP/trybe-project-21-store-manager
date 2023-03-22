@@ -2,7 +2,16 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const { saleService } = require('../../../src/services');
 const { saleModel } = require('../../../src/models');
-const { allSales, saleById } = require('./mocks/sale.service.mock');
+const {
+  allSales,
+  saleById,
+  newInsertSale,
+  insertSale,
+  invalidSale1,
+  invalidSale2,
+  invalidSale3,
+  invalidSale4,
+} = require('./mocks/sale.service.mock');
 
 const INVALID_VALUE = 'INVALID_VALUE';
 
@@ -70,6 +79,47 @@ describe('Teste de unidade do service sale', function () {
 
       expect(result.type).to.be.equal('SALE_NOT_FOUND');
       expect(result.message).to.deep.equal('Sale not found');
+    });
+  });
+
+  describe('Cadastro de vendas', function () {
+    it('Retorna as vendas cadastradas', async function () {
+      sinon.stub(saleModel, 'insertSale').resolves(3);
+      sinon.stub(saleModel, 'insertSaleProduct').resolves(3, newInsertSale);
+      sinon.stub(saleModel, 'findSaleProductById').resolves([newInsertSale]);
+
+      const result = await saleService.insertSaleProduct([newInsertSale]);
+
+      expect(result.type).to.be.equal(null);
+      expect(result.message).to.deep.equal(insertSale);
+    });
+
+    it('Retorna um erro caso productId não exista', async function () {
+      const result = await saleService.insertSaleProduct([invalidSale1]);
+
+      expect(result.type).to.be.equal('BAD_REQUEST');
+      expect(result.message).to.deep.equal('"productId" is required');
+    });
+
+    it('Retorna um erro caso quantity não exista', async function () {
+      const result = await saleService.insertSaleProduct([invalidSale2]);
+
+      expect(result.type).to.be.equal('BAD_REQUEST');
+      expect(result.message).to.deep.equal('"quantity" is required');
+    });
+
+    it('Retorna um erro caso productId seja inválido', async function () {
+      const result = await saleService.insertSaleProduct([invalidSale3]);
+
+      expect(result.type).to.be.equal(INVALID_VALUE);
+      expect(result.message).to.deep.equal('"productId" must be greater than or equal to 1');
+    });
+
+    it('Retorna um erro caso productId não seja encontrado', async function () {
+      const result = await saleService.insertSaleProduct([invalidSale4]);
+
+      expect(result.type).to.be.equal('PRODUCT_NOT_FOUND');
+      expect(result.message).to.deep.equal('Product not found');
     });
   });
 

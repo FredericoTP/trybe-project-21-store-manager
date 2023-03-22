@@ -52,7 +52,6 @@ const removeProductById = async (productId) => {
 
 const findByQuery = async (query) => {
   const error = schema.validateQuery(query);
-  console.log(error);
   if (error.type) return error;
 
   const products = await productModel.findByQuery(query);

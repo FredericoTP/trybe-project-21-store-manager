@@ -3,13 +3,14 @@ const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const { saleController } = require('../../../src/controllers');
 const { saleService } = require('../../../src/services');
-const { allSales, saleById } = require('./mocks/sale.controller.mock');
+const { allSales, saleById, saleInsert } = require('./mocks/sale.controller.mock');
 
 const { expect } = chai;
 chai.use(sinonChai);
 
 const INVALID_VALUE = 'INVALID_VALUE';
 const SALE_NOT_FOUND = 'SALE_NOT_FOUND';
+const PRODUCT_NOT_FOUND = 'PRODUCT_NOT_FOUND';
 
 describe('Testes de unidade do controller sale', function () {
   describe('Listando todos as vendas', function () {
@@ -25,6 +26,20 @@ describe('Testes de unidade do controller sale', function () {
 
       expect(res.status).to.have.been.calledWith(200);
       expect(res.json).to.have.been.calledWith(allSales);
+    });
+
+    it('Retorna um erro caso ocorra algo inesperado', async function () {
+      const res = {};
+      const req = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(saleService, 'findAll').resolves({ type: 500, message: 'Server error' });
+
+      await saleController.findAll(req, res);
+
+      expect(res.status).to.have.been.calledWith(500);
+      expect(res.json).to.have.been.calledWith('Server error');
     });
   });
 
@@ -137,6 +152,44 @@ describe('Testes de unidade do controller sale', function () {
 
       expect(res.status).to.have.been.calledWith(404);
       expect(res.json).to.have.been.calledWith({ message: 'Sale not found' });
+    });
+  });
+
+  describe('Cadastrando vendas', function () {
+    it('Deve retornar o status 200 e as vendas cadastradas', async function () {
+      const req = {
+        body: [
+          { productId: 1, quantity: 5 }
+        ],
+      };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(saleService, 'insertSaleProduct').resolves({ type: null, message: saleInsert });
+
+      await saleController.insertSaleProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(201);
+      expect(res.json).to.have.been.calledWith(saleInsert);
+    });
+
+    it('Deve retornar um erro caso o ID do produto não exista', async function () {
+      const req = {
+        body: [
+          { productId: 999, quantity: 5 }
+        ],
+      };
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(saleService, 'insertSaleProduct').resolves({ type: PRODUCT_NOT_FOUND, message: 'Product not found' });
+
+      await saleController.insertSaleProduct(req, res);
+
+      expect(res.status).to.have.been.calledWith(404);
+      expect(res.json).to.have.been.calledWith({ message: 'Product not found' });
     });
   });
 

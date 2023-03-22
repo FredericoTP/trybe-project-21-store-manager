@@ -26,7 +26,18 @@ const saleById = [
   }
 ]
 
+const saleInsert = {
+  id: 3,
+  itemsSold: [
+    {
+      productId: 1,
+      quantity: 5
+    }
+  ]
+}
+
 module.exports = {
   allSales,
   saleById,
+  saleInsert,
 }

@@ -26,7 +26,46 @@ const saleById = [
   }
 ]
 
+const newInsertSale = {
+  productId: 2,
+  quantity: 1,
+}
+
+const insertSale = {
+  id: 3,
+  itemsSold: [
+    {
+      productId: 2,
+      quantity: 1
+    }
+  ]
+}
+
+const invalidSale1 = {
+  quantity: 1
+}
+
+const invalidSale2 = {
+  productId: 2
+}
+
+const invalidSale3 = {
+  productId: 0,
+  quantity: 1
+}
+
+const invalidSale4 = {
+  productId: 999,
+  quantity: 1
+}
+
 module.exports = {
   allSales,
   saleById,
+  newInsertSale,
+  insertSale,
+  invalidSale1,
+  invalidSale2,
+  invalidSale3,
+  invalidSale4,
 }

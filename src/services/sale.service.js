@@ -20,6 +20,9 @@ const insertSaleProduct = async (sale) => {
   const error = schema.validateNewSaleProduct(sale);
   if (error.type) return error;
 
+  const errorId = await schema.validateProductIdExists(sale);
+  if (errorId.type) return errorId;
+
   const newSaleId = await saleModel.insertSale();
 
   await Promise.all(sale.map(
@@ -30,7 +33,7 @@ const insertSaleProduct = async (sale) => {
 
   const object = {
     id: newSaleId,
-    itensSold: saleProducts,
+    itemsSold: saleProducts,
   };
 
   return { type: null, message: object };

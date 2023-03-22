@@ -52,7 +52,10 @@ const insertSaleProduct = async (saleId, sale) => {
 };
 
 const findSaleProductById = async (saleId) => {
-  const query = 'SELECT * FROM StoreManager.sales_products WHERE sale_id = ?';
+  const query = `SELECT product_id, quantity 
+  FROM StoreManager.sales_products
+  WHERE sale_id = ?
+  ORDER BY product_id`;
 
   const [result] = await connection.execute(
     query, [saleId],
