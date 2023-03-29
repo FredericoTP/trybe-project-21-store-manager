@@ -7,12 +7,12 @@ No desenvolvimento foi utilizado um banco de dados MySQL para a gestão de dados
 
 ### Stacks utilizadas no desenvolvimento:
 <div style="display: inline_block"><br>
-  <img alt="Fred-DOCKER" height="50" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-plain.svg" />
-  <img alt="Fred-MySQL" height="50" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original-wordmark.svg" />
-  <img alt="Fred-NODE" height="50" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" />
-  <img alt="Fred-EXPRESS" height="50" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" />
-  <img alt="Fred-MOCHA" height="50" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mocha/mocha-plain.svg" />
-  <img alt="Fred-CHAI" height="50" width="40" src="https://www.svgrepo.com/show/353546/chai.svg" />
+  <img alt="Fred-DOCKER" height="50" width="50" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-plain.svg" />
+  <img alt="Fred-MySQL" height="50" width="50" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original-wordmark.svg" />
+  <img alt="Fred-NODE" height="50" width="50" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" />
+  <img alt="Fred-EXPRESS" height="50" width="50" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" />
+  <img alt="Fred-MOCHA" height="50" width="50" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mocha/mocha-plain.svg" />
+  <img alt="Fred-CHAI" height="50" width="50" src="https://www.svgrepo.com/show/353546/chai.svg" />
   <img alt="Sinon.JS" height="50" width="50" src="https://sinonjs.org/assets/images/logo.png">
 </div>
 
@@ -77,7 +77,7 @@ No desenvolvimento foi utilizado um banco de dados MySQL para a gestão de dados
 
 ## 100% :heavy_check_mark:
 
-![Project-Store-Manager]()
+![Project-Store-Manager](https://raw.githubusercontent.com/FredericoTP/trybe-project-21-store-manager/main/images/storemanager-grade.png)
 
 </details>
 <br />
